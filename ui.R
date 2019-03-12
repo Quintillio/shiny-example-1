@@ -1,18 +1,33 @@
 library(shiny)
 
-# example from https://shiny.rstudio.com/gallery/kmeans-example.html
+#shiny IO library
+# install.packages("rhandsontable") # install the package
+library(rhandsontable) # load the package
 
-# Define UI for application that plots random distributions
-shinyUI(pageWithSidebar(
-  headerPanel('Iris k-means clustering'),
-  sidebarPanel(
-    selectInput('xcol', 'X Variable', names(iris)),
-    selectInput('ycol', 'Y Variable', names(iris),
-                selected=names(iris)[[2]]),
-    numericInput('clusters', 'Cluster count', 3,
-                 min = 1, max = 9)
-  ),
-  mainPanel(
-    plotOutput('plot1')
+shinyUI( fluidPage(
+  #sets up the tabs on the top
+  tabsetPanel( type = "tabs",
+               #names and adds input into the different panels
+               tabPanel( "Number of Data Sets", 
+                         fluidRow(
+                           numericInput("obs", "Observations:", 10, min = 1, max = 100),
+                           verbatimTextOutput("value"),
+                           actionButton("entr", "Enter")
+                         )),
+               tabPanel("Data",
+                        fluidRow(
+                          column(3,
+                                 helpText("Editable Table"),
+                                 rHandsontableOutput("table"),
+                                 br(),
+                                 actionButton("curveBtn","Curve")
+                          )
+                        )
+               ),
+               tabPanel( "Plot",
+                         plotOutput("plot1")
+               )
   )
-))
+)
+)
+
